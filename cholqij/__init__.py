@@ -1,1 +1,1 @@
-from .cholqij import Gregoriano, Maya, Tamil, Farsi
+from .chol import Gregoriano, Mayab, Tamil, Farsi
