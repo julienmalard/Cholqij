@@ -19,3 +19,7 @@ def taqaxaj_tzij(cholqij, wachinaq, chabäl):
         return rqxk[chabäl]
     except KeyError:
         return rqxk[nabey_chabäl]
+
+
+def taqaxaj_ajilanïk(ajlnk, ruwäch):
+    return ajlnk

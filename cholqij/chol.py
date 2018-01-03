@@ -1,7 +1,7 @@
 from datetime import date as qj
 from datetime import timedelta
 
-from cholqij.chabäl import taqaxaj_tzij
+from cholqij.chabäl import taqaxaj_tzij, taqaxaj_ajilanïk as tqxj_ajlnk
 
 
 class Cholqij(object):
@@ -37,8 +37,16 @@ class Cholqij(object):
     def _taban_rikïn_qij(ri, qij, **kwargs):
         raise NotImplementedError
 
-    def tatzibaj(ri, rubanom, chabäl):
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
         raise NotImplementedError
+
+    def taya_qij_wuqqij(ri, chabäl=None):
+        if chabäl is None:
+            chabäl = ri.chabäl
+
+        aj_qij = ri.qij_python.isoweekday()
+
+        return taqaxaj_tzij(cholqij="Wuqq'ij", wachinaq="Kib'i' q'ij", chabäl=chabäl)[aj_qij]
 
     def tajala(ri, cholqij):
         for sbc in Cholqij.__subclasses__():
@@ -110,8 +118,19 @@ class Gregoriano(Cholqij):
 
         return qij_python.toordinal()
 
-    def tatzibaj(ri, rubanom, chabäl):
-        pass
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
+        if chabäl is None:
+            chabäl = ri.chabäl
+        if ruwäch_ajilanïk is None:
+            ruwäch_ajilanïk = ri.ruwäch_ajilanïk
+
+        if rubanom == 'konojel':
+            qij = tqxj_ajlnk(ri.qij, ruwäch=ruwäch_ajilanïk)
+            ik = taqaxaj_tzij(cholqij=ri.nubi, wachinaq="Kib'i' ik'", chabäl=chabäl)[ri.ik]
+            return '{} {} {}'.format(qij, ik, ri.junab)
+
+        else:
+            raise ValueError('')
 
 
 class Mayab(Cholqij):
@@ -168,30 +187,33 @@ class Mayab(Cholqij):
         ri.tzolkin = (ajlnk + 19) % 20 + 1
         ri.aj_tzolkin = (ajlnk + 3) % 13 + 1
 
-    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, rwch_ajlnk=None):
         if chabäl is None:
             chabäl = ri.chabäl
-        if ruwäch_ajilanïk is None:
-            ruwäch_ajilanïk = ri.ruwäch_ajilanïk
+        if rwch_ajlnk is None:
+            rwch_ajlnk = ri.ruwäch_ajilanïk
+
+        haab = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Haab'", chabäl=chabäl)[ri.haab - 1]
+        tzolkin = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Tz'olk'in", chabäl=chabäl)[ri.tzolkin - 1]
+        aj_tzolkin = tqxj_ajlnk(ri.aj_tzolkin, ruwäch=rwch_ajlnk)
+        qij_haab = tqxj_ajlnk(ri.qij_haab, ruwäch=rwch_ajlnk)
+        baktun, katun, tun, winal, kin = [tqxj_ajlnk(x, ruwäch=rwch_ajlnk) for x in [
+            ri.baktun, ri.katun, ri.tun, ri.winal, ri.kin]]
 
         if rubanom.lower() == 'konojel':
-            haab = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Haab'", chabäl=chabäl)
-            tzolkin = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Tz'olk'in", chabäl=chabäl)
 
             return '{}.{}.{}.{}.{} {} {}, {} {}'.format(
-                ri.baktun, ri.katun, ri.tun, ri.winal, ri.kin,
-                ri.aj_tzolkin, tzolkin[ri.tzolkin], ri.qij_haab, haab[ri.qij_haab])
+                baktun, katun, tun, winal, kin, aj_tzolkin, tzolkin, qij_haab, haab
+            )
 
         if rubanom.lower() == 'ajilanïk_qij':
-            return '{}.{}.{}.{}.{}'.format(ri.baktun, ri.katun, ri.tun, ri.winal, ri.kin)
+            return '{}.{}.{}.{}.{}'.format(baktun, katun, tun, winal, kin)
 
         if rubanom.lower() == "haab'":
-            haab = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Haab'", chabäl=chabäl)
-            return '{} {}'.format(ri.qij_haab, haab[ri.haab - 1])
+            return '{} {}'.format(qij_haab, haab)
 
         if rubanom.lower() == "tzolk'in":
-            tzolkin = taqaxaj_tzij(cholqij="Mayab'", wachinaq="Tz'olk'in", chabäl=chabäl)
-            return '{} {}'.format(ri.aj_tzolkin, tzolkin[ri.tzolkin - 1])
+            return '{} {}'.format(aj_tzolkin, tzolkin)
 
 
 class Tamil(Cholqij):
@@ -208,8 +230,70 @@ class Tamil(Cholqij):
     def _taban_rikïn_qij(ri, qij, **kwargs):
         pass
 
-    def tatzibaj(ri, rubanom, chabäl):
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
         pass
+
+
+class Japón(Cholqij):
+
+    nubi = 'Japón'
+
+    ketamabal_ajaw = {
+        "a": 0,
+        "b": 1,
+        "c": 2,
+        "d": 3
+    }
+
+    def __init__(ri, qij, ik=None, junab=None, ajaw=None):
+        ri.qij = qij
+        ri.ik = ik
+        ri.junab = junab
+        ri.ajaw = ajaw
+
+        super().__init__(qij=qij, ik=ik, junab=junab, ajaw=ajaw)
+
+        ri.chabäl = '日本語'
+        ri.ruwäch_ajilanïk = '日本語'
+
+    def _taban_rikïn_ajilanïk(ri, ajlnk):
+
+        qij_python = qj.fromordinal(ajlnk)
+        ri.qij = qij_python.day
+        ri.ik = qij_python.month
+        junab_py = qij_python.year
+
+        l_ajaw = sorted(ri.ketamabal_ajaw, key=lambda x: ri.ketamabal_ajaw[x])
+        jnb_ajaw = [ri.ketamabal_ajaw[x] for x in l_ajaw]
+
+        aj_ajaw = next(x for i, x in enumerate(jnb_ajaw[::-1]) if junab_py >= x)
+        ri.ajaw = l_ajaw[aj_ajaw]
+        ri.junab = junab_py - jnb_ajaw[aj_ajaw] + 1
+
+    def _taban_rikïn_qij(ri, qij, **kwargs):
+        ri.qij = qij
+        ri.ik = kwargs['ik']
+        ri.ajaw = kwargs['ajaw']
+        ri.junab = kwargs['junab']
+
+        junab_py = ri.ketamabal_ajaw[ri.ajaw] + ri.junab - 1
+        qij_python = qj(year=junab_py, month=ri.ik, day=ri.qij)
+
+        return qij_python.toordinal()
+
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
+        if chabäl is None:
+            chabäl = ri.chabäl
+        if ruwäch_ajilanïk is None:
+            ruwäch_ajilanïk = ri.ruwäch_ajilanïk
+
+        ajaw = taqaxaj_tzij(cholqij=ri.nubi, wachinaq="Kib'i' ajaw", chabäl=chabäl)
+        junab = tqxj_ajlnk(ri.junab, ruwäch=ruwäch_ajilanïk)
+        ik = tqxj_ajlnk(ri.ik, ruwäch=ruwäch_ajilanïk)
+        qij = tqxj_ajlnk(ri.qij, ruwäch=ruwäch_ajilanïk)
+
+        if rubanom.lower() == 'konojel':
+            return '{}{}年{}月{}日'.format(ajaw, junab, ik, qij)
 
 
 class Farsi(Cholqij):
@@ -219,5 +303,5 @@ class Farsi(Cholqij):
     def _taban_rikïn_qij(ri, qij, **kwargs):
         pass
 
-    def tatzibaj(ri, rubanom, chabäl):
+    def tatzibaj(ri, rubanom='konojel', chabäl=None, ruwäch_ajilanïk=None):
         pass
