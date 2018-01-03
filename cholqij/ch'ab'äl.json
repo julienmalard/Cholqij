@@ -1,0 +1,41 @@
+{
+  "Wuqq'ij": {
+    "Ch'ab'äl": "Español",
+    "Kib'i' q'ij": {
+      "Español": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"],
+      "Français": ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"],
+      "日本語": ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日"]
+    }
+  },
+
+  "Mayab'": {
+    "Ch'ab'äl": "Yukateko",
+    "Haab'" : {
+      "Yukateko": ["Pop", "Wo'", "Sip", "Sotz'", "Sek", "Xul", "Yaxk'in", "Mol", "Ch'en", "Yax", "Sak'", "Keh",
+      "Mak", "K'ank'in", "Muwan", "Pax", "K'ayab'", "Kumk'u", "Wayeb'"]
+    },
+    "Tz'olk'in": {
+      "Yukateko": ["Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan", "Kimi", "Manik'", "Lamat", "Muluk", "Ok", "Chuwen", "Eb'", "B'en", "Ix", "Men", "K'ib'", "Kab'an", "Etz'nab'", "Kawak", "Ajaw"],
+      "K'iche'": ["Imox", "Iq'", "Aq'ab'al", "K'at", "Kan", "Kame", "Kej", "Q'anil", "Toj", "Tz'i'", "B'atz'", "E'", "Aj", "B'alam", "Tzikin", "Ajmaq", "No'j", "Tijax", "Kawoq", "Ajpu"]
+    }
+  },
+
+  "Gregoriano": {
+    "Ch'ab'äl": "Español",
+
+    "Kib'i' ik'": {
+      "Español": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+        "noviembre", "diciembre"]
+    }
+  },
+
+  "Tamil": {
+    "Ch'ab'äl": "தமிழ்",
+    "Kib'i' q'ij": {
+
+    },
+    "Kib'i' ik'": {
+
+    }
+  }
+}
