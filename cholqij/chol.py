@@ -505,7 +505,7 @@ class Japón(Cholqij):
         l_ajaw = sorted(ri.ketamabal_ajaw, key=lambda x: ri.ketamabal_ajaw[x])
         jnb_ajaw = [ri.ketamabal_ajaw[x] for x in l_ajaw]
 
-        aj_ajaw = next(x for i, x in enumerate(jnb_ajaw[::-1]) if junab_py >= x)
+        aj_ajaw = next(len(jnb_ajaw) - i - 1 for i, x in enumerate(jnb_ajaw[::-1]) if junab_py >= x)
         ri.ajaw = l_ajaw[aj_ajaw]
         ri.junab = junab_py - jnb_ajaw[aj_ajaw] + 1
 
@@ -526,7 +526,7 @@ class Japón(Cholqij):
         if ruwäch_ajilanïk is None:
             ruwäch_ajilanïk = ri.ruwäch_ajilanïk
 
-        ajaw = taqaxaj_tzij(cholqij=ri.nubi, wachinaq="Kib'i' ajaw", chabäl=chabäl)
+        ajaw = ri.ajaw
         junab = tqxj_ajlnk(ri.junab, ruwäch=ruwäch_ajilanïk)
         ik = tqxj_ajlnk(ri.ik, ruwäch=ruwäch_ajilanïk)
         qij = tqxj_ajlnk(ri.qij, ruwäch=ruwäch_ajilanïk)

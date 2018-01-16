@@ -1,1 +1,1 @@
-from .chol import Gregoriano, Mayab, Tamil, Farsi
+from .chol import Gregoriano, Mayab, Tamil, Farsi, Japón
